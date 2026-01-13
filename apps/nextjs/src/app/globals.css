@@ -1,0 +1,91 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "tailwindcss-motion";
+
+@theme {
+  --font-\*: initial;
+  --font-accent: Roobert, sans-serif;
+
+  --container-8xl: 88rem;
+  --container-9xl: 96rem;
+
+  --spacing-ready-to-start: 36rem;
+  --spacing-image-side-spacing: 2.5rem;
+  --spacing-half-hero-height: 36rem;
+  --spacing-10xl: 107.5rem;
+
+  --breakpoint-xs: 30rem;
+
+  --color-\*: initial;
+  --color-primary: #e3562d;
+  --color-primary-hover: #cc4926;
+  --color-primary-active: #a73b1f;
+  --color-primary-focus: #ec6840;
+  --color-primary-disabled: #e5e5e5;
+  --color-primary-text: #faf4df;
+  --color-primary-text-disabled: #a1a1a1;
+
+  --color-bg: #faf4df;
+  --color-bg-hover: #f3eed4;
+  --color-bg-active: #e9e2c1;
+  --color-bg-focus: #f7f2dc;
+  --color-bg-disabled: #f5f5f0;
+  --color-bg-text: #2e1c13;
+  --color-bg-text-disabled: #a1a1a1;
+  --color-bg-border: #c9c2a8;
+  --color-bg-border-hover: #a89f74;
+  --color-bg-border-active: #3b82f6;
+  --color-bg-border-disabled: #d6d3cc;
+  --color-bg-border-error: #c0392b;
+
+  --color-bg-dark: #161616;
+  --color-bg-soft-dark: #2f2f2f;
+
+  --color-text-muted: #767676;
+  --color-error: #c0392b;
+
+  --color-overlay: #2e1c138c;
+
+  --color-success: #648553;
+
+  --animate-backdrop-blur: backdrop-blur 0.5s forwards;
+  --animate-backdrop-blur-reverse: backdrop-blur-reverse 0.5s forwards;
+
+  --text-shadow-xl: 0px 0px 5px black;
+
+  --shadow-image: 0 0px 30px -5px black;
+
+  @keyframes backdrop-blur {
+    0% {
+      backdrop-filter: blur(0);
+    }
+    100% {
+      backdrop-filter: blur(10px);
+    }
+  }
+
+  @keyframes backdrop-blur-reverse {
+    0% {
+      backdrop-filter: blur(10px);
+    }
+    100% {
+      backdrop-filter: blur(0);
+    }
+  }
+}
+
+@custom-variant touch-device {
+  @media (pointer: coarse) {
+    @slot;
+  }
+}
+
+.disable-scrollbar-gutter {
+  scrollbar-gutter: auto !important;
+}
+
+@media (min-height: 45rem) {
+  .hide-on-more-half-hero-height {
+    display: none;
+  }
+}
