@@ -1,12 +1,19 @@
 import type { TFormaMediaUnwrapped } from 'types/forma-media';
 import type { FormaMediaInstanceObjectType } from 'types/generated/sanity-types-generated';
-import { getSanityImageUrl, q, runQuery } from '@/utils/groqd-client';
+import { getSanityImageUrl, q, runQuery, type TSanityImageUrlBuilderOptions } from '@/utils/groqd-client';
 
 type TSanityQueryParams = {
   documentId: string;
 };
 
-export async function getFormaMediaData(formaMedia: FormaMediaInstanceObjectType): Promise<TFormaMediaUnwrapped> {
+type TGetFormaMediaDataOptions = {
+  imageBuilderOptions?: TSanityImageUrlBuilderOptions;
+};
+
+export async function getFormaMediaData(
+  formaMedia: FormaMediaInstanceObjectType,
+  options?: TGetFormaMediaDataOptions
+): Promise<TFormaMediaUnwrapped> {
   const brightness = formaMedia.brightness;
   const showMediaTitle = formaMedia.showMediaTitle;
 
@@ -15,7 +22,8 @@ export async function getFormaMediaData(formaMedia: FormaMediaInstanceObjectType
   });
 
   if (mediaAsset._type === 'formaImageAssetDocumentType') {
-    const imageUrl = getSanityImageUrl(mediaAsset.image);
+    const imageUrl = getSanityImageUrl(mediaAsset.image, options?.imageBuilderOptions);
+    const imageUrlHq = getSanityImageUrl(mediaAsset.image);
     const imageAltText = `${mediaAsset.clientName} - ${mediaAsset.imageTitle}`;
 
     return {
@@ -24,10 +32,12 @@ export async function getFormaMediaData(formaMedia: FormaMediaInstanceObjectType
       brightness,
       imageAltText,
       imageUrl,
+      imageUrlHq,
       showMediaTitle
     };
   } else if (mediaAsset._type === 'forma360AssetDocumentType') {
     const imageUrl = getSanityImageUrl(mediaAsset.image);
+    const imageUrlHq = getSanityImageUrl(mediaAsset.image);
     const imageAltText = `${mediaAsset.clientName} - ${mediaAsset.imageTitle}`;
 
     return {
@@ -36,10 +46,13 @@ export async function getFormaMediaData(formaMedia: FormaMediaInstanceObjectType
       brightness,
       imageAltText,
       imageUrl,
+      imageUrlHq,
       showMediaTitle,
-      is360HintShown: formaMedia.is360HintShown,
       initialZoom: formaMedia.initialZoom ?? 0,
-      isZoomEnabled: formaMedia.isZoomEnabled ?? true,
+      hintOpacity: formaMedia.hintOpacity ?? 100,
+      isZoomEnabled: formaMedia.isZoomEnabled ?? false,
+      is360HintShown: formaMedia.is360HintShown ?? true,
+      is360FullScreenShown: formaMedia.is360FullScreenShown ?? true,
       is360AutoplayEnabled: formaMedia.is360AutoplayEnabled ?? false
     };
   } else if (mediaAsset._type === 'formaVideoAssetDocumentType') {

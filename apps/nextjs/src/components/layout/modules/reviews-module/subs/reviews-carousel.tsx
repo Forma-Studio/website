@@ -60,7 +60,7 @@ export function ReviewsCarousel({ reviews, moduleTitle, imagePosition }: TProps)
     setHasMouseEntered(false);
   };
 
-  useInterval(() => handleNextClick(), hasMouseEntered ? null : secondsToMilliseconds(6));
+  useInterval(() => handleNextClick(), hasMouseEntered ? null : secondsToMilliseconds(600000));
 
   return (
     <MotionDiv
@@ -73,7 +73,7 @@ export function ReviewsCarousel({ reviews, moduleTitle, imagePosition }: TProps)
           <AnimatePresence initial={false}>
             <div key={id} className='py-4 px-6 md:py-10 md:px-10 flex col-start-1 row-start-1'>
               <div className='flex flex-col justify-between'>
-                <div>
+                <div className='pt-4 pb-4'>
                   <Heading value={moduleTitle} />
                 </div>
                 <motion.div {...commonMotionProps} className='mt-4 lg:mt-0'>
@@ -99,7 +99,7 @@ export function ReviewsCarousel({ reviews, moduleTitle, imagePosition }: TProps)
               </div>
             </div>
           </AnimatePresence>
-          <div className='mt-4 mb-10 mx-auto md:mt-0 md:mb-0 md:mx-0 md:absolute flex gap-2 bottom-[3.25rem] right-10'>
+          <div className='mt-0 mb-10 mx-auto md:mt-0 md:mb-0 md:mx-0 md:absolute flex gap-2 bottom-[3.25rem] right-10'>
             <IconButton
               surface='primary'
               icon={CaretLeftIcon}
@@ -142,7 +142,7 @@ const stylesTv = tv({
   slots: {
     brandImgTv: 'h-16 w-auto',
     reviewWrapperTv:
-      'w-full lg:h-[720px] grid grid-cols-1 grid-rows-[400px_auto] lg:grid-rows-1 bg-primary overflow-hidden',
+      'w-full lg:h-[740px] xl:h-[840px] grid grid-cols-1 grid-rows-[400px_auto] lg:grid-rows-1 bg-primary overflow-hidden',
     reviewImgWrapperTv: 'row-start-1 relative',
     reviewContentWrapperTv: 'row-start-2 lg:row-start-1 relative grid grid-cols-1 grid-rows-1'
   },
@@ -150,14 +150,14 @@ const stylesTv = tv({
     imagePosition: {
       [ELEMENT_X_POSITION.LEFT]: {
         reviewWrapperTv: 'lg:grid-cols-[2fr_minmax(512px,1fr)]',
-        reviewContentWrapperTv: 'col-start-2',
-        reviewImgWrapperTv: 'col-start-1'
+        reviewContentWrapperTv: 'col-start-1 lg:col-start-2',
+        reviewImgWrapperTv: 'row-start-1 col-start-1'
       },
 
       [ELEMENT_X_POSITION.RIGHT]: {
         reviewWrapperTv: 'lg:grid-cols-[minmax(512px,1fr)_2fr]',
         reviewContentWrapperTv: 'col-start-1',
-        reviewImgWrapperTv: 'col-start-2'
+        reviewImgWrapperTv: 'col-start-1 lg:col-start-2'
       }
     },
     brandShade: {

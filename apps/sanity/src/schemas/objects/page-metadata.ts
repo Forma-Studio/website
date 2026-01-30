@@ -20,6 +20,12 @@ export const pageMetadataObjectType = defineType({
       validation: rule => rule.required()
     }),
     defineField({
+      type: 'string',
+      title: 'Keywords',
+      description: 'Comma separated keywords for SEO (e.g. "Forma, Architecture, Design")',
+      name: 'keywords'
+    }),
+    defineField({
       type: 'object',
       title: 'Open Graph',
       name: 'openGraph',
@@ -41,7 +47,8 @@ export const pageMetadataObjectType = defineType({
           name: 'openGraphImage',
           title: 'Open Graph Image',
           type: 'reference',
-          to: [{ type: DOCUMENT_SCHEMA_TYPES.formaImageAsset }]
+          to: [{ type: DOCUMENT_SCHEMA_TYPES.formaImageAsset }],
+          validation: rule => rule.required()
         })
       ]
     })

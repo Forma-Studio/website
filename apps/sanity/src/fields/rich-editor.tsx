@@ -1,6 +1,7 @@
 import { PaletteIcon } from 'lucide-react';
 import type { PropsWithChildren } from 'react';
 import {
+  type ArrayOfType,
   type ArrayRule,
   type BlockDecoratorDefinition,
   type BlockDecoratorProps,
@@ -20,6 +21,8 @@ type TProps = {
   allowH1?: boolean;
   allowH2?: boolean;
   allowBulletPoint?: boolean;
+  allowOrderedPoint?: boolean;
+  allowLink?: boolean;
   validation?: ValidationBuilder<ArrayRule<unknown[]>, unknown[]>;
 };
 
@@ -30,8 +33,10 @@ export function defineRichEditorField({
   fieldset,
   allowColorMarkDecorator = true,
   allowH1 = false,
+  allowLink = false,
   allowH2 = false,
   allowBulletPoint = false,
+  allowOrderedPoint = false,
   validation
 }: TProps): ReturnType<typeof defineField> {
   return defineField({
@@ -45,9 +50,9 @@ export function defineRichEditorField({
         type: 'block',
         marks: {
           decorators: getMarkDecorators(allowColorMarkDecorator),
-          annotations: []
+          annotations: getMarkAnnotations(allowLink)
         },
-        lists: getListDecorators(allowBulletPoint),
+        lists: getListDecorators(allowBulletPoint, allowOrderedPoint),
         styles: getStyleDecorators(allowH1, allowH2)
       })
     ],
@@ -71,6 +76,32 @@ function getMarkDecorators(allowColorMarkDecorator: boolean) {
   }
 
   return baseDecorators;
+}
+
+function getMarkAnnotations(allowLink: boolean) {
+  const annotations: ArrayOfType<'object' | 'reference'>[] = [];
+
+  if (allowLink) {
+    annotations.push({
+      name: 'link',
+      type: 'object',
+      title: 'External Link',
+      fields: [
+        {
+          name: 'href',
+          type: 'url',
+          title: 'URL'
+        },
+        {
+          name: 'caption',
+          type: 'string',
+          title: 'Caption'
+        }
+      ]
+    });
+  }
+
+  return annotations;
 }
 
 function getStyleDecorators(allowH1Mark: boolean, allowH2Mark: boolean): BlockStyleDefinition[] {
@@ -98,13 +129,20 @@ function getStyleDecorators(allowH1Mark: boolean, allowH2Mark: boolean): BlockSt
   return styleDecorators;
 }
 
-function getListDecorators(allowBulletMark: boolean): BlockListDefinition[] {
+function getListDecorators(allowBulletMark: boolean, allowOrderedPoint: boolean): BlockListDefinition[] {
   const styleDecorators: BlockListDefinition[] = [];
 
   if (allowBulletMark) {
     styleDecorators.push({
       title: 'Bullet',
       value: 'bullet'
+    });
+  }
+
+  if (allowOrderedPoint) {
+    styleDecorators.push({
+      title: 'Numbered',
+      value: 'number'
     });
   }
 

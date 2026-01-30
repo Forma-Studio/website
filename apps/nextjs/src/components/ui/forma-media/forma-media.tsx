@@ -1,7 +1,7 @@
 import { isNotNil } from 'es-toolkit';
 import type { CSSProperties, DetailedHTMLProps, ImgHTMLAttributes, VideoHTMLAttributes } from 'react';
 import type { FormaMediaInstanceObjectType } from 'types/generated/sanity-types-generated';
-import { getSanityImageUrl, q, runQuery } from '@/utils/groqd-client';
+import { getSanityImageUrl, q, runQuery, type TSanityImageUrlBuilderOptions } from '@/utils/groqd-client';
 import { Viewer360 } from '../viewer-360/viewer-360';
 
 type TProps = {
@@ -14,6 +14,7 @@ type TProps = {
   wrapper360Classname?: string;
   forceHideMediaTitle?: true;
   forceIs360HintShown?: boolean;
+  imageBuilderOptions?: TSanityImageUrlBuilderOptions;
 };
 
 type TSanityQueryParams = {
@@ -27,7 +28,8 @@ export async function FormaMedia({
   wrapper360Classname,
   className,
   forceHideMediaTitle,
-  forceIs360HintShown
+  forceIs360HintShown,
+  imageBuilderOptions
 }: TProps) {
   const shouldHideMediaTitle = forceHideMediaTitle === true || !formaMedia.showMediaTitle;
   const shouldDisplayMediaTitle = !shouldHideMediaTitle;
@@ -41,7 +43,7 @@ export async function FormaMedia({
   });
 
   if (mediaAsset._type === 'formaImageAssetDocumentType') {
-    const imageUrl = getSanityImageUrl(mediaAsset.image);
+    const imageUrl = getSanityImageUrl(mediaAsset.image, imageBuilderOptions);
     const imageAltText = `${mediaAsset.clientName} - ${mediaAsset.imageTitle}`;
 
     return (
@@ -54,7 +56,7 @@ export async function FormaMedia({
           className={className ?? imgProps?.className}
         />
         {shouldDisplayMediaTitle && (
-          <div className='absolute bottom-4 left-4  text-primary-text  text-shadow-xl text-md'>
+          <div className='absolute bottom-4 left-4 text-primary-text text-shadow-xl text-md'>
             <p className='text-md'>{imageAltText}</p>
           </div>
         )}
@@ -63,15 +65,19 @@ export async function FormaMedia({
   } else if (mediaAsset._type === 'forma360AssetDocumentType') {
     const imageUrl = getSanityImageUrl(mediaAsset.image);
     const showDisplayHint = forceIs360HintShown ? true : formaMedia.is360HintShown;
+    const imageAltText = `${mediaAsset.clientName} - ${mediaAsset.imageTitle}`;
 
     return (
       <div className={wrapper360Classname ?? 'size-full'} style={brightnessStyle}>
         <Viewer360
           imageUrl={imageUrl}
+          imageLabel={imageAltText}
           showDisplayHint={showDisplayHint}
+          hintOpacity={formaMedia.hintOpacity}
           initialZoom={formaMedia.initialZoom}
           isZoomEnabled={formaMedia.isZoomEnabled}
           isAutoplayEnabled={formaMedia.is360AutoplayEnabled}
+          isFullScreenShown={formaMedia.is360FullScreenShown}
         />
       </div>
     );
@@ -88,6 +94,7 @@ export async function FormaMedia({
         <video
           preload='metadata'
           style={brightnessStyle}
+          playsInline={true}
           muted={formaMedia.isMuted}
           loop={formaMedia.isLoopEnabled}
           autoPlay={formaMedia.isAutoplayEnabled}
@@ -99,7 +106,7 @@ export async function FormaMedia({
           <source src={video.url} type='video/mp4' />
         </video>
         {shouldDisplayMediaTitle && (
-          <div className='absolute bottom-4 left-4  text-primary-text  text-shadow-xl text-md'>
+          <div className='absolute bottom-4 left-4 text-primary-text text-shadow-xl text-md'>
             <p className='text-md'>{videoAltText}</p>
           </div>
         )}

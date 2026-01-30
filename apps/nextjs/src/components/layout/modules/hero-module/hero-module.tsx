@@ -24,7 +24,12 @@ export async function HeroModule({ module }: TProps) {
   return (
     <div className='w-full min-h-dvh relative flex justify-center'>
       <div className='absolute inset-0'>
-        <FormaMedia formaMedia={module.backgroundMedia} className='object-cover object-bottom size-full' />
+        <FormaMedia
+          formaMedia={module.backgroundMedia}
+          className='object-cover object-bottom size-full'
+          wrapper360Classname='overflow-hidden'
+          imageBuilderOptions={{ quality: 40 }}
+        />
       </div>
 
       <div className='grid grid-rows-[1fr] relative pt-20 pb-4'>

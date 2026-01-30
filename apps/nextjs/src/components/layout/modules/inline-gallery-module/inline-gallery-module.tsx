@@ -34,7 +34,7 @@ export async function InlineGalleryModule({ module }: TProps) {
       );
 
       if (media._type === 'formaImageAssetDocumentType') {
-        const imageInstanceData = getFormaImageInstanceData(media);
+        const imageInstanceData = getFormaImageInstanceData(media, { width: 1800 });
 
         return {
           id: media._id,
@@ -73,7 +73,7 @@ export async function InlineGalleryModule({ module }: TProps) {
             <InlineGalleryCarousel images={images} variant={module.variant} />
           </div>
           {(module.primaryCta.showCta || module.secondaryCta.showCta) && (
-            <div className='mt-10 mx-auto flex gap-8'>
+            <div className='mt-10 mx-4 lg:mx-auto flex flex-col lg:flex-row gap-2 lg:gap-8'>
               {module.primaryCta.showCta && (
                 <LinkButton href={module.primaryCta.url} size='large' variant='primary' surface={buttonSurface}>
                   {module.primaryCta.caption}

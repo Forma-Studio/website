@@ -1,6 +1,7 @@
 import { SANITY_DOCUMENT_IDS } from '@forma/common';
 import { visionTool } from '@sanity/vision';
 import {
+  BandageIcon,
   BinocularsIcon,
   BookKeyIcon,
   ClapperboardIcon,
@@ -13,6 +14,7 @@ import {
   PhoneCallIcon,
   RouteIcon,
   SparklesIcon,
+  TextInitialIcon,
   WavesIcon
 } from 'lucide-react';
 import { defineConfig } from 'sanity';
@@ -102,6 +104,26 @@ export default defineConfig({
               .title('Client Secret Pages')
               .icon(BookKeyIcon)
               .child(S.documentTypeList(DOCUMENT_SCHEMA_TYPES.clientSecretPage).title('Client Secret Pages')),
+            S.listItem()
+              .icon(BookKeyIcon)
+              .id(SANITY_DOCUMENT_IDS.privacyPolicyPage)
+              .schemaType(DOCUMENT_SCHEMA_TYPES.policyPage)
+              .title('Privacy Policy Page')
+              .child(
+                S.document()
+                  .documentId(SANITY_DOCUMENT_IDS.privacyPolicyPage)
+                  .schemaType(DOCUMENT_SCHEMA_TYPES.policyPage)
+              ),
+            S.listItem()
+              .icon(TextInitialIcon)
+              .id(SANITY_DOCUMENT_IDS.cookiePolicyPage)
+              .schemaType(DOCUMENT_SCHEMA_TYPES.policyPage)
+              .title('Cookie Policy Page')
+              .child(
+                S.document()
+                  .documentId(SANITY_DOCUMENT_IDS.cookiePolicyPage)
+                  .schemaType(DOCUMENT_SCHEMA_TYPES.policyPage)
+              ),
             S.divider().title('Singletons'),
             S.listItem()
               .icon(WavesIcon)
@@ -124,6 +146,17 @@ export default defineConfig({
                   .id(SANITY_DOCUMENT_IDS.maintananceScreen)
                   .schemaType(DOCUMENT_SCHEMA_TYPES.maintananceScreen)
                   .documentId(SANITY_DOCUMENT_IDS.maintananceScreen)
+              ),
+            S.listItem()
+              .icon(BandageIcon)
+              .id(SANITY_DOCUMENT_IDS.topbar)
+              .schemaType(DOCUMENT_SCHEMA_TYPES.topbar)
+              .title('Topbar')
+              .child(
+                S.editor()
+                  .id(SANITY_DOCUMENT_IDS.topbar)
+                  .schemaType(DOCUMENT_SCHEMA_TYPES.topbar)
+                  .documentId(SANITY_DOCUMENT_IDS.topbar)
               ),
             S.divider().title('Modules'),
             ...moduleDocumentSchemaTypes

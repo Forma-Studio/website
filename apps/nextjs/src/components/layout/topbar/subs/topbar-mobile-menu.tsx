@@ -3,7 +3,7 @@
 import { ImageIcon, ListIcon, PanoramaIcon, VideoIcon, XIcon } from '@phosphor-icons/react';
 import { HouseIcon } from '@phosphor-icons/react/dist/ssr';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useId } from 'react';
 import {
   Button as AriaButton,
   DialogTrigger as AriaDialogTrigger,
@@ -18,14 +18,22 @@ import { LogoWithText } from '@/ui/logos/logo-with-text/logo-with-text';
 import { topbarCommonNavLinks } from './topbar-common';
 
 export function TopbarMobileMenu() {
-  const pathname = usePathname();
+  const buttonId = useId();
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (isOpen) {
+      document.body.parentElement.classList.add('disable-scrollbar-gutter');
+    } else {
+      document.body.parentElement.classList.remove('disable-scrollbar-gutter');
+    }
+  };
 
   return (
-    <AriaDialogTrigger key={pathname}>
-      <AriaButton>
+    <AriaDialogTrigger onOpenChange={handleOpenChange}>
+      <AriaButton aria-label='Open mobile menu' id={buttonId}>
         <ListIcon className='size-8 text-primary-text' />
       </AriaButton>
-      <ModalOverlay className={({ state }) => modalOverlayStyle({ isOpen: state.isOpen })}>
+      <ModalOverlay isDismissable={true} className={({ state }) => modalOverlayStyle({ isOpen: state.isOpen })}>
         <Modal className={({ isEntering, isExiting }) => modalStyle({ isEntering, isExiting })}>
           <Dialog aria-label='Mobile menu' className='h-full flex flex-col overflow-y-auto pb-10'>
             <div>
@@ -97,7 +105,7 @@ export function TopbarMobileMenu() {
 }
 
 const modalOverlayStyle = tv({
-  base: 'z-20 fixed inset-0 bg-overlay duration-300',
+  base: 'z-[100] fixed inset-0 bg-overlay duration-300',
   variants: {
     isOpen: {
       true: 'animate-backdrop-blur',

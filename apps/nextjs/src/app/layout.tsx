@@ -1,10 +1,9 @@
 import { Footer } from '@/layout/footer/footer';
-import { interNextFont } from '../utils/fonts/inter';
 import { Roobert } from '../utils/fonts/roobert';
 import './globals.css';
+import { CookieManagerProvider } from 'components/cookie-manager/cookie-manager-provider';
 import type { ReactNode } from 'react';
 import { tv } from 'tailwind-variants';
-import { CookieConsentFloatingBanner } from '@/layout/cookie-consent-floating-banner/CookieConsentFloatingBanner';
 import { MaintananceSplashScreen } from '@/layout/maintanance-splash-screen/maintanance-splash-screen';
 import { ScrollAtTop } from '@/layout/scroll-at-top/scroll-at-top';
 import { ToastRegion } from '@/layout/toast-notification/toast-region';
@@ -13,23 +12,24 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   const { bodyTv, mainDivTv } = stylesTv();
 
   const getHtmlClassName = () => {
-    return [Roobert.className, interNextFont.className].join(' ');
+    return [Roobert.className].join(' ');
   };
 
   return (
     <html lang='en' className={getHtmlClassName()}>
       <ToastRegion />
       <body className={bodyTv()}>
-        {process.env.NEXT_PUBLIC_UNDER_MAINTENANCE === 'true' ? (
-          <MaintananceSplashScreen />
-        ) : (
-          <>
-            <div className={mainDivTv()}>{children}</div>
-            <Footer />
-            <ScrollAtTop />
-            <CookieConsentFloatingBanner />
-          </>
-        )}
+        <CookieManagerProvider>
+          {process.env.UNDER_MAINTENANCE === 'true' ? (
+            <MaintananceSplashScreen />
+          ) : (
+            <>
+              <main className={mainDivTv()}>{children}</main>
+              <Footer />
+              <ScrollAtTop />
+            </>
+          )}
+        </CookieManagerProvider>
       </body>
     </html>
   );
