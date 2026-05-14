@@ -1,7 +1,7 @@
 import { Footer } from '@/layout/footer/footer';
 import { Roobert } from '../utils/fonts/roobert';
 import './globals.css';
-import { CookieManagerProvider } from 'components/cookie-manager/cookie-manager-provider';
+import { VisitorTrackingNoCookie } from 'components/cookie-manager/visitor-tracking-no-cookie';
 import type { ReactNode } from 'react';
 import { tv } from 'tailwind-variants';
 import { MaintananceSplashScreen } from '@/layout/maintanance-splash-screen/maintanance-splash-screen';
@@ -17,19 +17,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang='en' className={getHtmlClassName()}>
+      <VisitorTrackingNoCookie />
       <ToastRegion />
       <body className={bodyTv()}>
-        <CookieManagerProvider>
-          {process.env.UNDER_MAINTENANCE === 'true' ? (
-            <MaintananceSplashScreen />
-          ) : (
-            <>
-              <main className={mainDivTv()}>{children}</main>
-              <Footer />
-              <ScrollAtTop />
-            </>
-          )}
-        </CookieManagerProvider>
+        {/* <CookieManagerProvider> */}
+        {process.env.UNDER_MAINTENANCE === 'true' ? (
+          <MaintananceSplashScreen />
+        ) : (
+          <>
+            <main className={mainDivTv()}>{children}</main>
+            <Footer />
+            <ScrollAtTop />
+          </>
+        )}
+        {/* </CookieManagerProvider> */}
       </body>
     </html>
   );
